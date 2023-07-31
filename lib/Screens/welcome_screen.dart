@@ -1,7 +1,13 @@
+import 'dart:html';
+
+import 'package:chat_box/Screens/login_screen.dart';
+import 'package:chat_box/Screens/registration_screen.dart';
+
 import '/constants.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  static const String id = 'welcome_screen';
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -47,6 +53,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: MaterialButton(
                   onPressed: () {
                     //Go to log in screen
+                    Navigator.pushNamed(context, LoginScreen.id);
                   },
                   minWidth: 100.0,
                   height: 60.0,
@@ -66,6 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: MaterialButton(
                   onPressed: () {
                     //Go to registration screen
+                    Navigator.pushNamed(context, RegistrationScreen.id);
                   },
                   minWidth: 100.0,
                   height: 60.0,

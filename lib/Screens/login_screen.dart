@@ -2,7 +2,7 @@ import '/constants.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-
+  static const String id = 'login_screen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextField(
               decoration: const InputDecoration(
-                hintText: 'Enter your email',
+                hintText: 'Enter your email please',
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextField(
               decoration: const InputDecoration(
-                hintText: 'Enter your password',
+                hintText: 'Enter your password please',
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -84,9 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   minWidth: 200.0,
                   height: 42.0,
-                  child: Text(
+                  child: const Text(
                     'Log In',
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),

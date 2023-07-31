@@ -2,6 +2,7 @@ import '/constants.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  static const String id = 'registration_screen';
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
@@ -26,7 +27,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             TextField(
               decoration: const InputDecoration(
-                hintText: 'Enter your email',
+                hintText: 'Enter your email please',
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
