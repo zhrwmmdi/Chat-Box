@@ -1,5 +1,6 @@
-import 'dart:html';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:chat_box/Components/Rounded_Button.dart';
 import 'package:chat_box/Screens/login_screen.dart';
 import 'package:chat_box/Screens/registration_screen.dart';
 
@@ -12,7 +13,24 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation animation;
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        vsync: this,
+      duration: const Duration(seconds: 1)
+    );
+
+    controller.forward();
+    controller.addListener(() {
+      setState(() {
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,17 +44,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 190,
-                  width: 190,
-                  child: Image.asset('images/logo.png'),
+                Hero(
+                  tag: 'logo',
+                  child: SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: Image.asset('images/logo.png'),
+                  ),
                 ),
-                const Text(
-                  'Flash Chat',
-                  style: TextStyle(
+                DefaultTextStyle(
+                  style: const TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                     color: kLoginButtonColor,
+                  ),
+                  child: AnimatedTextKit(
+                    //totalRepeatCount: 3,
+                    repeatForever: true,
+                    animatedTexts: [
+                      TypewriterAnimatedText('Chat Box'),
+                    ],
                   ),
                 ),
               ],
@@ -44,49 +71,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Material(
-                elevation: 5.0,
+            RoundedButton(
                 color: kLoginButtonColor,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to log in screen
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  },
-                  minWidth: 100.0,
-                  height: 60.0,
-                  child: const Text(
-                    'Log In',
-                    style:  TextStyle(color: kWhiteColor),
-                  ),
-                ),
-              ),
+                onPressed:(){
+                  Navigator.pushNamed(context, LoginScreen.id);
+                },
+              title: 'Log In',
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Material(
-                elevation: 5.0,
-                color: kRegisterButtonColor,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen
-                    Navigator.pushNamed(context, RegistrationScreen.id);
-                  },
-                  minWidth: 100.0,
-                  height: 60.0,
-                  child: const Text(
-                    'Register',
-                    style:  TextStyle(color: kWhiteColor),
-                  ),
-                ),
-              ),
-            ),
+            RoundedButton(
+              color: kRegisterButtonColor,
+              onPressed: (){
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
+              title: 'Register',
+            )
           ],
         ),
       ),
     );
   }
 }
+
