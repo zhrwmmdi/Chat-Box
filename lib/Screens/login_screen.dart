@@ -1,3 +1,5 @@
+import 'package:chat_box/Components/Rounded_Button.dart';
+
 import '/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
-              decoration: kTextFieldColor,
+              decoration: kTextFieldDecoration.copyWith(
+                hintText: 'Enter your E-mail'
+              ),
               onChanged: (value) {
                 //Do something with the user input
               },
@@ -37,7 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 16,
             ),
             TextField(
-              decoration: kTextFieldColor,
+              decoration: kTextFieldDecoration.copyWith(
+                hintText: 'Enter your password'
+              ),
               onChanged: (value) {
                 //Do something with the user input
               },
@@ -45,24 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 24.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Material(
-                elevation: 5.0,
+            RoundedButton(
                 color: kLoginButtonColor,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Implement login functionality
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
+                title: 'Log In',
+                onPressed: (){
+              //TODO: log in Navigation
+            }
             ),
             const SizedBox(height: 12),
             IconButton(
