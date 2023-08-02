@@ -1,3 +1,5 @@
+import 'package:chat_box/services/authService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_box/constants.dart';
 
@@ -19,7 +21,8 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
-                // Implement logout functionality
+                Navigator.pop(context);
+                AuthService().signOut();
               }),
         ],
         title: const Text('⚡ ️Chat'),
