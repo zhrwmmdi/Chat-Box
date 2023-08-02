@@ -1,5 +1,7 @@
 import 'package:chat_box/Components/Rounded_Button.dart';
+import 'package:chat_box/Screens/chat_screen.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '/constants.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,11 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var auth = FirebaseAuth.instance;
+  String errorMessage = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,43 +38,69 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             const SizedBox(
               height: 48.0,
             ),
-            TextFormField(
-              decoration: kTextFieldDecoration.copyWith(
-                hintText: 'Enter your Email',
-                labelText: 'Email'
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: 'Enter your Email',
+                      labelText: 'Email'
+                    ),
+                    controller: _emailController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (email){
+                      return email != null && EmailValidator.validate(email) ? null : 'Please enter a valid Email';
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  TextFormField(
+                    decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter your password',
+                        labelText: 'Password'
+                    ),
+                    obscureText: true,
+                    controller: _passwordController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (password){
+                      return password != null && password.length>5 ? null : 'The password should be at least 6 characters';
+                    },
+                  ),
+                ],
               ),
-              onChanged: (value) {
-                //Do something with the user input
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (email){
-                return email != null && EmailValidator.validate(email) ? null : 'Please enter a valid Email';
-              },
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            TextFormField(
-              decoration: kTextFieldDecoration.copyWith(
-                hintText: 'Enter your password',
-                labelText: 'Password'
-              ),
-              obscureText: true,
-              onChanged: (value) {
-                //Do something with the user input
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (password){
-                return password != null && password.length>5 ? null : 'The password should be at least 6 characters';
-              },
-            ),
+
             const SizedBox(
               height: 24.0,
             ),
+            Text(
+              errorMessage,
+              textAlign: TextAlign.center,
+              style:const TextStyle(
+                color: Colors.red,
+                fontSize: 16
+              ),
+            ),
             RoundedButton(
               title: 'Register',
-              onPressed: (){
-               //TODO: navigation to registering
+              onPressed: () async{
+               if(_formKey.currentState!.validate()){
+                 try{
+                   await auth.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text).then((value) {
+                     Navigator.pop(context);
+                     Navigator.pushNamed(context, ChatScreen.id);
+                   });
+                 }catch(e){
+                   print('ERROR: ${e.toString()}');
+                   setState(() {
+                     errorMessage = e.toString().split('] ')[1];
+                   });
+                 }
+               }else{
+
+               }
               },
               color: kRegisterButtonColor,
             ),
