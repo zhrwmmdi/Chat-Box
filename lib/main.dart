@@ -2,6 +2,8 @@ import 'package:chat_box/Screens/chat_screen.dart';
 import 'package:chat_box/Screens/login_screen.dart';
 import 'package:chat_box/Screens/registration_screen.dart';
 import 'package:chat_box/Screens/welcome_screen.dart';
+import 'package:chat_box/services/authService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,19 +22,24 @@ class ChatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        WelcomeScreen.id : (context) => WelcomeScreen(),
-        ChatScreen.id : (context) => ChatScreen(),
-        RegistrationScreen.id : (context) => RegistrationScreen(),
-        LoginScreen.id : (context) => LoginScreen()
-      },
-      initialRoute: WelcomeScreen.id,
-      // theme: ThemeData.dark().copyWith(
-      //   scaffoldBackgroundColor: kBackgroundColor,
-      // ),
-      home: WelcomeScreen(),
+    return StreamBuilder<User?>(
+      stream: AuthService().authStateChanges,
+      builder: (context, snapshot) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          routes: {
+            WelcomeScreen.id : (context) => WelcomeScreen(),
+            ChatScreen.id : (context) => ChatScreen(),
+            RegistrationScreen.id : (context) => RegistrationScreen(),
+            LoginScreen.id : (context) => LoginScreen()
+          },
+          initialRoute: AuthService().getCurrentUser != null ? ChatScreen.id : WelcomeScreen.id,
+          // theme: ThemeData.dark().copyWith(
+          //   scaffoldBackgroundColor: kBackgroundColor,
+          // ),
+          home: WelcomeScreen(),
+        );
+      }
     );
   }
 }
