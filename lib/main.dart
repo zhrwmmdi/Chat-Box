@@ -4,6 +4,7 @@ import 'package:chat_box/Screens/registration_screen.dart';
 import 'package:chat_box/Screens/welcome_screen.dart';
 import 'package:chat_box/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -32,13 +33,11 @@ class ChatBox extends StatelessWidget {
             RegistrationScreen.id : (context) => RegistrationScreen(),
             LoginScreen.id : (context) => LoginScreen()
           },
-          home: AuthService().getCurrentUser != null
-              ? ChatScreen()
-              : WelcomeScreen(),
+          initialRoute: AuthService().getCurrentUser != null ? ChatScreen.id : WelcomeScreen.id,
           // theme: ThemeData.dark().copyWith(
           //   scaffoldBackgroundColor: kBackgroundColor,
           // ),
-
+          home: WelcomeScreen(),
         );
       }
     );
