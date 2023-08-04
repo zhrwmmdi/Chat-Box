@@ -33,11 +33,11 @@ class ChatBox extends StatelessWidget {
             RegistrationScreen.id : (context) => RegistrationScreen(),
             LoginScreen.id : (context) => LoginScreen()
           },
-          initialRoute: AuthService().getCurrentUser != null ? ChatScreen.id : WelcomeScreen.id,
+          home: AuthService().getCurrentUser != null ? ChatScreen(): WelcomeScreen(),
           // theme: ThemeData.dark().copyWith(
           //   scaffoldBackgroundColor: kBackgroundColor,
           // ),
-          home: WelcomeScreen(),
+          //home: WelcomeScreen(),
         );
       }
     );
