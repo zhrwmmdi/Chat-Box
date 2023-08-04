@@ -1,33 +1,29 @@
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:chat_box/Components/Rounded_Button.dart';
 import 'package:chat_box/Screens/login_screen.dart';
 import 'package:chat_box/Screens/registration_screen.dart';
-
 import '/constants.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
+  const WelcomeScreen({super.key});
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation animation;
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-        vsync: this,
-      duration: const Duration(seconds: 1)
-    );
-
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     controller.forward();
     controller.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
@@ -59,7 +55,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                     color: kLoginButtonColor,
                   ),
                   child: AnimatedTextKit(
-                    //totalRepeatCount: 3,
                     repeatForever: true,
                     animatedTexts: [
                       TypewriterAnimatedText('Chat Box'),
@@ -72,15 +67,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               height: 48.0,
             ),
             RoundedButton(
-                color: kLoginButtonColor,
-                onPressed:(){
-                  Navigator.pushNamed(context, LoginScreen.id);
-                },
+              color: kLoginButtonColor,
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.id);
+              },
               title: 'Log In',
             ),
             RoundedButton(
               color: kRegisterButtonColor,
-              onPressed: (){
+              onPressed: () {
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
               title: 'Register',
@@ -91,4 +86,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     );
   }
 }
-

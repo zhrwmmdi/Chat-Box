@@ -2,14 +2,13 @@ import 'package:chat_box/Components/Rounded_Button.dart';
 import 'package:chat_box/Screens/chat_screen.dart';
 import 'package:chat_box/services/authService.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
 import '/constants.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
+  const LoginScreen({super.key});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -21,6 +20,43 @@ class _LoginScreenState extends State<LoginScreen> {
   String errorMessage = '';
   bool errorOccurred = false;
   bool showSpinner = false;
+
+  void _loginAction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(
+          () {
+            showSpinner = true;
+            errorOccurred = false;
+          },
+        );
+        await AuthService()
+            .signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text)
+            .then(
+          (value) {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, ChatScreen.id);
+          },
+        );
+        setState(
+          () {
+            showSpinner = false;
+          },
+        );
+      } catch (e) {
+        setState(
+          () {
+            showSpinner = false;
+            errorOccurred = true;
+            errorMessage = e.toString().split('] ')[1];
+          },
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,36 +85,39 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Enter your Email',
-                        labelText: 'Email'
-                      ),
+                          hintText: 'Enter your Email', labelText: 'Email'),
                       controller: _emailController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (email){
-                        return email != null && EmailValidator.validate(email) ? null : 'Please enter a valid Email';
+                      validator: (email) {
+                        return email != null && EmailValidator.validate(email)
+                            ? null
+                            : 'Please enter a valid Email';
                       },
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
+                      onFieldSubmitted: (event) {
+                        _loginAction();
+                      },
                       decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your password',
-                          labelText: 'Password'
-                      ),
+                          labelText: 'Password'),
                       obscureText: true,
                       controller: _passwordController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (password){
-                        return password != null && password.length>5 ? null : 'The password should be at least 6 characters';
+                      validator: (password) {
+                        return password != null && password.length > 5
+                            ? null
+                            : 'The password should be at least 6 characters';
                       },
-
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(
                 height: 24.0,
               ),
@@ -87,38 +126,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   errorMessage,
                   textAlign: TextAlign.center,
-                  style:const TextStyle(
-                      color: Colors.red,
-                      fontSize: 16
-                  ),
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
               RoundedButton(
-                  color: kLoginButtonColor,
-                  title: 'Log In',
-                onPressed: () async{
-                  if(_formKey.currentState!.validate()){
-                    try{
-                      setState(() {
-                        showSpinner = true;
-                        errorOccurred = false;
-                      });
-                      await AuthService().signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text).then((value) {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, ChatScreen.id);
-                      });
-                      setState(() {
-                        showSpinner = false;
-                      });
-                    }catch(e){
-                      print('ERROR: ${e.toString()}');
-                      setState(() {
-                        showSpinner = false;
-                        errorOccurred = true;
-                        errorMessage = e.toString().split('] ')[1];
-                      });
-                    }
-                  }
+                color: kLoginButtonColor,
+                title: 'Log In',
+                onPressed: () {
+                  _loginAction();
                 },
               ),
               const SizedBox(height: 12),

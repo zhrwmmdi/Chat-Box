@@ -23,23 +23,20 @@ class ChatBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: AuthService().authStateChanges,
-      builder: (context, snapshot) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          routes: {
-            WelcomeScreen.id : (context) => WelcomeScreen(),
-            ChatScreen.id : (context) => ChatScreen(),
-            RegistrationScreen.id : (context) => RegistrationScreen(),
-            LoginScreen.id : (context) => LoginScreen()
-          },
-          home: AuthService().getCurrentUser != null ? ChatScreen(): WelcomeScreen(),
-          // theme: ThemeData.dark().copyWith(
-          //   scaffoldBackgroundColor: kBackgroundColor,
-          // ),
-          //home: WelcomeScreen(),
-        );
-      }
-    );
+        stream: AuthService().authStateChanges,
+        builder: (context, snapshot) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            routes: {
+              WelcomeScreen.id: (context) => WelcomeScreen(),
+              ChatScreen.id: (context) => ChatScreen(),
+              RegistrationScreen.id: (context) => RegistrationScreen(),
+              LoginScreen.id: (context) => LoginScreen()
+            },
+            home: AuthService().getCurrentUser != null
+                ? ChatScreen()
+                : WelcomeScreen(),
+          );
+        });
   }
 }

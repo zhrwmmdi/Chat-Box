@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const kWhiteColor = Colors.white;
 const kChatEmailColor = Colors.white54;
-const kSenderBoxColor = Colors.white12;
 const kLoginButtonColor = Color(0xff3B67B0);
 const kSendButtonColor = Colors.blue;
 var kRegisterButtonColor = Color(0xFFf7cd54);
@@ -21,6 +20,7 @@ const kMessageTextFieldDecoration = InputDecoration(
 );
 
 const kMessageContainerDecoration = BoxDecoration(
+  color: Color(0xffE0E0E0),
   border: Border(
     top: BorderSide(color: Colors.white60, width: 1),
   ),
@@ -28,8 +28,7 @@ const kMessageContainerDecoration = BoxDecoration(
 
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter your email please',
-  contentPadding:
-  EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(10)),
   ),
