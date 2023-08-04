@@ -16,6 +16,8 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordCheckController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool errorOccurred = false;
   bool showSpinner = false;
@@ -23,34 +25,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _registerAction() async {
     if (_formKey.currentState!.validate()) {
-      try {
-        setState(
-          () {
-            showSpinner = true;
-            errorOccurred = false;
-          },
-        );
-        await AuthService()
-            .createUserWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text)
-            .then(
-          (value) {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, ChatScreen.id);
-          },
-        );
-        setState(
-          () {
+      if (_passwordController.text == _passwordCheckController.text) {
+        try {
+          setState(
+            () {
+              showSpinner = true;
+              errorOccurred = false;
+            },
+          );
+          await AuthService()
+              .createUserWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text)
+              .then(
+            (value) {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, ChatScreen.id);
+            },
+          );
+          setState(
+            () {
+              showSpinner = false;
+            },
+          );
+        } catch (e) {
+          setState(() {
             showSpinner = false;
+            errorOccurred = true;
+            errorMessage = e.toString().split('] ')[1];
+          });
+        }
+      } else {
+        setState(
+          () {
+            errorOccurred = true;
+            errorMessage = 'Password is not repeated correctly.';
           },
         );
-      } catch (e) {
-        setState(() {
-          showSpinner = false;
-          errorOccurred = true;
-          errorMessage = e.toString().split('] ')[1];
-        });
       }
     }
   }
@@ -99,14 +110,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 16,
                     ),
                     TextFormField(
-                      onFieldSubmitted: (event) {
-                        _registerAction();
-                      },
                       decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your password',
                           labelText: 'Password'),
                       obscureText: true,
                       controller: _passwordController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (password) {
+                        return password != null && password.length > 5
+                            ? null
+                            : 'The password should be at least 6 characters';
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      onFieldSubmitted: (event) {
+                        _registerAction();
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                          hintText: 'Repeat your password',
+                          labelText: 'Password Confirmation'),
+                      obscureText: true,
+                      controller: _passwordCheckController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (password) {
                         return password != null && password.length > 5
